@@ -5,16 +5,16 @@ from torch import nn
 def train(args, model, train_generator, epoch, optimizer):
     model.train()
     device = torch.device('cuda')
-    criterion = nn.CrossEntropy_Loss(reduction='mean')
+    criterion = nn.CrossEntropyLoss(reduction='mean')
 
     for batch_index, input_tensor in enumerate(train_generator):
-        torch.zero_grad()
         input_data, target = input_tensor
 
         if args.cuda:
             input_data = input_data.to(device)
             target = target.to(device)
 
+        optimizer.zero_grad()
         output = model(input_data)
         loss = criterion(output, target)
         loss.backwards(output)
