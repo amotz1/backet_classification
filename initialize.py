@@ -1,6 +1,7 @@
 from backet_dataset import BacketDataset
 from torch.utils.data import DataLoader
 import torch
+from model import CNN
 import os
 
 

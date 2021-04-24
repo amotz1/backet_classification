@@ -32,11 +32,5 @@ def acc(output, target):
         correct += torch.sum(pred == target).item()
         return correct, correct/len(target)
 
-def select_optimizer():
-
-
-
-
-
 
 

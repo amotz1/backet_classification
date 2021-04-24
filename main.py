@@ -6,10 +6,11 @@ from save_model import save_model
 from train import train
 from evaluation import evaluation
 
+
 def main():
     args = get_args()
     wandb.init()
-    wandb.config.arguments(args)
+    wandb.config.update(args)
     torch.backends.cudnn.benchmark = True
     [train_generator, valid_generator, model, optimizer] = initialize(args)
 
@@ -27,8 +28,8 @@ def get_args():
     parser.add_argument('--dataset_name', type=str, defult='shape_class', help='dataset_name')
     parser.add_argument('--epochs_number', type=int, defult=64, help='epoch number for training')
     parser.add_argument('--classes', type=int, defult=3, help='dataset_classes')
-    parser.add_argument('--batch size', type=int, defult=64, help='batch size for training')
     parser.add_argument('--lr', type=int, defult=0.01, help='learning rate')
+    parser.add_argument('--device', type=int, default=0, help='gpu device')  # default is 0
     parser.add_argument('--weight_decay', type=int, defult=1e-7, help='dropout')
     parser.add_argument('--cuda', action='store_true', defult=True, help='gpu for training acceleration')
     parser.add_argument('--model', type=str, defult='resnet50')
@@ -39,10 +40,4 @@ def get_args():
     args = parser.parse_args()
     return args
 
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+main()
