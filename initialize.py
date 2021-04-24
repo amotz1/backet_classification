@@ -2,6 +2,7 @@ from backet_dataset import BacketDataset
 from torch.utils.data import DataLoader
 import torch
 from model import CNN
+import torch.optim as optim
 import os
 
 
@@ -11,9 +12,9 @@ def initialize(args):
 
     model = select_model(args)
 
-    optimizer = select_optimizer(args)
+    optimizer = select_optimizer(args,model)
 
-    if args.cuda():
+    if args.cuda:
         model.to(args.device)
 
     train_params = {'batch_size': args.batch_size, 'shuffle': True, 'num_workers': 2}
@@ -44,7 +45,7 @@ def select_model(args):
     return CNN(args.classes, args.model)
 
 
-def select_optimizer(args):
+def select_optimizer(args, model):
     if args.opt == 'sgd':
         return optim.SGD(model.parameters(), lr=args.lr, momentum = 0.5, weight_decay =args.weight_decay)
 
