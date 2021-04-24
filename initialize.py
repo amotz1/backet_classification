@@ -3,6 +3,8 @@ from torch.utils.data import DataLoader
 import torch
 from model import CNN
 import torch.optim as optim
+from torchvision import datasets, transforms
+
 import os
 
 
@@ -17,11 +19,11 @@ def initialize(args):
     if args.cuda:
         model.to(args.device)
 
-    train_params = {'batch_size': args.batch_size, 'shuffle': True, 'num_workers': 2}
-    valid_params = {'batch_size': args.batch_size, 'shuffle': False, 'num_workers': 2}
+    train_params = {'num_workers': 2, 'pin_memory': True}
+    valid_params = {'num_workers': 2, 'pin_memory': True}
 
     train_generator = DataLoader(
-        datasets.MNIST(root=args.rootpath, train=True, download=True,
+        datasets.MNIST(root=args.root_path, train=True, download=True,
                        transform=transforms.Compose([
                            transforms.ToTensor(),
                            transforms.Normalize((0.1307,), (0.3081,))
@@ -29,16 +31,16 @@ def initialize(args):
         batch_size=args.batch_size, shuffle=True, **train_params)
 
     valid_generator = DataLoader(
-        datasets.MNIST(root=args.dataroot, train=False, transform=transforms.Compose([
+        datasets.MNIST(root=args.root_path, train=False, transform=transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize((0.1307,), (0.3081,))
         ])),
-        batch_size=args.test_batch_size, shuffle=True, **valid_params)
+        batch_size=args.batch_size, shuffle=True, **valid_params)
 
     # train_generator = torch.DataLoader(train_loader, pin_memory=True, **train_params)
     # valid_generator = torch.DataLoader(valid_loader, pin_memory=True, **valid_params)
 
-    return optimizer, model, train_generator, valid_generator
+    return train_generator, valid_generator, model, optimizer
 
 
 def select_model(args):
