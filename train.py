@@ -17,7 +17,7 @@ def train(args, model, train_generator, epoch, optimizer):
         optimizer.zero_grad()
         output = model(input_data)
         loss = criterion(output, target)
-        loss.backwards(output)
+        loss.backward(output)
         optimizer.step()
         correct, accuracy = acc(output, target)
         if batch_index % 100 == 0:

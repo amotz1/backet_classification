@@ -24,14 +24,14 @@ def initialize(args):
 
     train_generator = DataLoader(
         datasets.CIFAR10(root=args.root_path, train=True, download=True,
-                       transform=transforms.Compose([
+                         transform=transforms.Compose([
                            transforms.ToTensor(),
                            transforms.Normalize((0.1307,), (0.3081,))
                        ])),
         batch_size=args.batch_size, shuffle=True, **train_params)
 
     valid_generator = DataLoader(
-        datasets.MNIST(root=args.root_path, train=False, transform=transforms.Compose([
+        datasets.CIFAR10(root=args.root_path, train=False, transform=transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize((0.1307,), (0.3081,))
         ])),
