@@ -23,7 +23,7 @@ def initialize(args):
     valid_params = {'num_workers': 2, 'pin_memory': True}
 
     train_generator = DataLoader(
-        datasets.MNIST(root=args.root_path, train=True, download=True,
+        datasets.CIFAR10(root=args.root_path, train=True, download=True,
                        transform=transforms.Compose([
                            transforms.ToTensor(),
                            transforms.Normalize((0.1307,), (0.3081,))
