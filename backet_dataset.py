@@ -2,7 +2,7 @@
 
 
 class BacketDataset:
-    def __init__(self, mode, num_classes=3, dataset_path='/data', dim=(224, 244)):
+    def __init__(self, mode, num_classes=10, dataset_path='/data', dim=(224, 244)):
         self.root = '/content/' + str(dataset_path) + '/' + mode + '/'
         self.classes = num_classes
         self.dim = dim

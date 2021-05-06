@@ -27,7 +27,7 @@ def initialize(args):
                          transform=transforms.Compose([
                            transforms.ToTensor(),
                            transforms.Normalize((0.1307,), (0.3081,))
-                       ])),
+                         ])),
         batch_size=args.batch_size, shuffle=True, **train_params)
 
     valid_generator = DataLoader(
