@@ -24,6 +24,7 @@ def train(args, model, train_generator, epoch, optimizer):
             print(f'epoch: {epoch} loss:{loss.item()} acc:{accuracy}')
 
 
+
 def acc(output, target):
     with torch.no_grad():
         pred = torch.argmax(output, dim=1)

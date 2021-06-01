@@ -19,7 +19,7 @@ def main():
         train(args, model, train_generator, epoch, optimizer)
         evaluation(args, model, valid_generator)
 
-        save_model(model, optimizer, args, loss, epoch)
+        save_model(model, optimizer, args, epoch)
 
 
 def get_args():
@@ -34,8 +34,8 @@ def get_args():
     parser.add_argument('--cuda', action='store_true', default=True, help='gpu for training acceleration')
     parser.add_argument('--model', type=str, default='resnet18')
     parser.add_argument('--opt', type=str, default='adam', choices=('sgd','adam','rmsprop'))
-    parser.add_argument('--root_path', type=str, default='./data', help='path to dataset')
-    parser.add_argument('--save', type=str, default='/save/backetnet', help='path to checkpoint save directory')
+    parser.add_argument('--root_path', type=str, default='/content/MnistData', help='path to dataset')
+    parser.add_argument('--save', type=str, default='/content/save/backetnet', help='path to checkpoint save directory')
 
     args = parser.parse_args()
     return args

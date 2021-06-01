@@ -19,26 +19,14 @@ def initialize(args):
     if args.cuda:
         model.to(args.device)
 
-    train_params = {'num_workers': 2, 'pin_memory': True}
-    valid_params = {'num_workers': 2, 'pin_memory': True}
+    train_params = {'num_workers': 2, 'batch_size': args.batch_size,'shuffle': True}
+    valid_params = {'num_workers': 2, 'pin_memory': True, 'batch_size': args.batch_size, 'shuffle': True}
 
-    train_generator = DataLoader(
-        datasets.CIFAR10(root=args.root_path, train=True, download=True,
-                         transform=transforms.Compose([
-                           transforms.ToTensor(),
-                           transforms.Normalize((0.1307,), (0.3081,))
-                         ])),
-        batch_size=args.batch_size, shuffle=True, **train_params)
+    train_generator = datasets.ImageFolder(root=args.root_path)
+    valid_generator = datasets.ImageFolder(root=args.root_path)
 
-    valid_generator = DataLoader(
-        datasets.CIFAR10(root=args.root_path, train=False, transform=transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize((0.1307,), (0.3081,))
-        ])),
-        batch_size=args.batch_size, shuffle=True, **valid_params)
-
-    # train_generator = torch.DataLoader(train_loader, pin_memory=True, **train_params)
-    # valid_generator = torch.DataLoader(valid_loader, pin_memory=True, **valid_params)
+    train_generator = torch.DataLoader(train_generator, pin_memory=True, **train_params)
+    valid_generator = torch.DataLoader(valid_generator, pin_memory=True, **valid_params)
 
     return train_generator, valid_generator, model, optimizer
 
