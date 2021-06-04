@@ -25,8 +25,8 @@ def initialize(args):
     train_generator = datasets.ImageFolder(root=args.root_path)
     valid_generator = datasets.ImageFolder(root=args.root_path)
 
-    train_generator = torch.DataLoader(train_generator, pin_memory=True, **train_params)
-    valid_generator = torch.DataLoader(valid_generator, pin_memory=True, **valid_params)
+    train_generator = DataLoader(train_generator, pin_memory=True, **train_params)
+    valid_generator = DataLoader(valid_generator, pin_memory=True, **valid_params)
 
     return train_generator, valid_generator, model, optimizer
 
