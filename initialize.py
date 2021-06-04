@@ -19,11 +19,19 @@ def initialize(args):
     if args.cuda:
         model.to(args.device)
 
+    train_transforms = transforms.Compose([
+        transforms.ToTensor()
+    ])
+
+    valid_transforms = transforms.Compose([
+        transforms.ToTensor()
+    ])
+
     train_params = {'num_workers': 2, 'batch_size': args.batch_size,'shuffle': True}
     valid_params = {'num_workers': 2, 'pin_memory': True, 'batch_size': args.batch_size, 'shuffle': True}
 
-    train_generator = datasets.ImageFolder(root=args.root_path)
-    valid_generator = datasets.ImageFolder(root=args.root_path)
+    train_generator = datasets.ImageFolder(args.root_path, train_transforms)
+    valid_generator = datasets.ImageFolder(args.root_path,valid_transforms)
 
     train_generator = DataLoader(train_generator, pin_memory=True, **train_params)
     valid_generator = DataLoader(valid_generator, pin_memory=True, **valid_params)
