@@ -23,20 +23,17 @@ def initialize(args):
         transforms.ToTensor()
     ])
 
-    valid_transforms = transforms.Compose([
-        transforms.ToTensor()
-    ])
-
     train_params = {'num_workers': 2, 'batch_size': args.batch_size,'shuffle': True}
     valid_params = {'num_workers': 2, 'batch_size': args.batch_size, 'shuffle': True}
 
     train_generator = datasets.ImageFolder(args.root_path, train_transforms)
-    valid_generator = datasets.ImageFolder(args.root_path,valid_transforms)
+    train, val,test = torch.utils.data.random_split(train_generator, [48000, 12000,10000],)
 
-    train_generator = DataLoader(train_generator, pin_memory=True, **train_params)
-    valid_generator = DataLoader(valid_generator, pin_memory=True, **valid_params)
+    train_loader = DataLoader(train, pin_memory=True, **train_params)
+    valid_loader = DataLoader(val, pin_memory=True, **valid_params)
+    test_loader = DataLoader(test, pin_memory=True, **valid_params)
 
-    return train_generator, valid_generator, model, optimizer
+    return train_loader, valid_loader, model, optimizer
 
 
 def select_model(args):

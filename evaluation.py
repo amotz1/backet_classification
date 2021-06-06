@@ -2,7 +2,7 @@ import torch
 from torch import nn
 
 
-def evaluation(args, model, valid_generator):
+def evaluation(args, model, valid_loader):
     model.eval()
     device = args.device
     model.to(device)
@@ -10,7 +10,7 @@ def evaluation(args, model, valid_generator):
     valid_loss, correct,total = 0,0,0
 
     with torch.no_grad():
-        for batch_index, input_tensor in enumerate(valid_generator):
+        for batch_index, input_tensor in enumerate(valid_loader):
             input_data, target = input_tensor
             input_data, target = input_data.to(device), target.to(device)
             output = model(input_data)

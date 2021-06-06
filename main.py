@@ -12,12 +12,12 @@ def main():
     wandb.init()
     wandb.config.update(args)
     torch.backends.cudnn.benchmark = True
-    [train_generator, valid_generator, model, optimizer] = initialize(args)
+    [train_loader, valid_loader, model, optimizer] = initialize(args)
 
     wandb.watch(model)
     for epoch in range(1, args.epochs_number + 1):
-        train(args, model, train_generator, epoch, optimizer)
-        evaluation(args, model, valid_generator)
+        train(args, model, train_loader, epoch, optimizer)
+        evaluation(args, model, valid_loader)
 
         save_model(model, optimizer, args, epoch)
 
