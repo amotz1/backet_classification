@@ -34,7 +34,6 @@ def train(args, model, train_loader, epoch, optimizer):
 def acc(output, target):
     with torch.no_grad():
         pred = torch.argmax(output, dim=1)
-        
         print('output.shape', output.shape)
         print('pred[0] = ', pred[0])
         print('pred[1] = ', pred[1])

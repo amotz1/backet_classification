@@ -26,12 +26,11 @@ def initialize(args):
     train_params = {'num_workers': 2, 'batch_size': args.batch_size,'shuffle': True}
     valid_params = {'num_workers': 2, 'batch_size': args.batch_size, 'shuffle': True}
 
-    train_generator = datasets.ImageFolder(args.root_path, train_transforms)
-    train, val,test = torch.utils.data.random_split(train_generator, [48000, 12000,10000],)
+    train_generator = datasets.ImageFolder(args.root_path + '/' + 'train', train_transforms)
+    train, val = torch.utils.data.random_split(train_generator, [48000, 12000,10000],)
 
     train_loader = DataLoader(train, pin_memory=True, **train_params)
     valid_loader = DataLoader(val, pin_memory=True, **valid_params)
-    test_loader = DataLoader(test, pin_memory=True, **valid_params)
 
     return train_loader, valid_loader, model, optimizer
 
