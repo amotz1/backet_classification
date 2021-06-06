@@ -28,7 +28,7 @@ def initialize(args):
     ])
 
     train_params = {'num_workers': 2, 'batch_size': args.batch_size,'shuffle': True}
-    valid_params = {'num_workers': 2, 'pin_memory': True, 'batch_size': args.batch_size, 'shuffle': True}
+    valid_params = {'num_workers': 2, 'batch_size': args.batch_size, 'shuffle': True}
 
     train_generator = datasets.ImageFolder(args.root_path, train_transforms)
     valid_generator = datasets.ImageFolder(args.root_path,valid_transforms)
