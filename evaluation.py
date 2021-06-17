@@ -2,7 +2,8 @@ import torch
 from torch import nn
 import wandb
 
-def evaluation(args, model, valid_loader, train_avg_loss, train_accuracy, epoch):
+
+def evaluation(args, model, valid_loader, epoch):
     model.eval()
     device = args.device
     model.to(device)

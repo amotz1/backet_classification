@@ -16,8 +16,8 @@ def main():
 
     wandb.watch(model)
     for epoch in range(1, args.epochs_number + 1):
-        train_avg_loss, train_accuracy = train(args, model, train_loader, epoch, optimizer)
-        evaluation(args, model, valid_loader, train_avg_loss, train_accuracy, epoch)
+        train(args, model, train_loader, epoch, optimizer)
+        evaluation(args, model, valid_loader, epoch)
 
         save_model(model, optimizer, args, epoch)
 
