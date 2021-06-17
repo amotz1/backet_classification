@@ -1,8 +1,8 @@
 import torch
 from torch import nn
+import wandb
 
-
-def evaluation(args, model, valid_loader):
+def evaluation(args, model, valid_loader, train_avg_loss, train_accuracy, epoch):
     model.eval()
     device = args.device
     model.to(device)
@@ -18,10 +18,7 @@ def evaluation(args, model, valid_loader):
             total += target.size(0)
             correct += (predicted == target).sum().item()
             valid_loss += criterion(output, target).item()
-
-            print('Test Accuracy of the model on the 10000 test images: {} %'
-                  .format(100 * correct / total), f'average loss is {valid_loss/total}')
-
+            wandb.log({'epoch':epoch,'valid_avg_loss': valid_loss/args.batch_size, 'accuracy': correct/total})
 
 
 

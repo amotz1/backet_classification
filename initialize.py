@@ -20,7 +20,9 @@ def initialize(args):
         model.to(args.device)
 
     train_transforms = transforms.Compose([
-        transforms.ToTensor()
+        transforms.ToTensor(),
+        transforms.Resize((224, 224)),
+        transforms.RandomFlip()
     ])
 
     train_params = {'num_workers': 2, 'batch_size': args.batch_size,'shuffle': True}
@@ -41,13 +43,13 @@ def select_model(args):
 
 def select_optimizer(args, model):
     if args.opt == 'sgd':
-        return optim.SGD(model.parameters(), lr=args.lr, momentum = 0.5, weight_decay =args.weight_decay)
+        return optim.SGD(model.parameters(), lr=args.lr, momentum=0.5, weight_decay =args.weight_decay)
 
     elif args.opt == 'adam':
-        return optim.Adam(model.parameters(), lr=args.lr, weight_decay =args.weight_decay)
+        return optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
     elif args.opt == 'rmsprop':
-        return optim.RMSprop(model.parameters(), lr=args.lr, weight_decay = args.weight_decay)
+        return optim.RMSprop(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
     else:
         assert False, "unspecified optimizer"
