@@ -13,11 +13,11 @@ def main():
     wandb.config.update(args)
     torch.backends.cudnn.benchmark = True
     [train_loader, valid_loader, model, optimizer] = initialize(args)
-
+    scaler = torch.cuda.amp.GradScaler()
     wandb.watch(model)
     for epoch in range(1, args.epochs_number + 1):
-        train(args, model, train_loader, epoch, optimizer)
-        evaluation(args, model, valid_loader, epoch)
+        train(args, model, train_loader, epoch, optimizer, scaler)
+        evaluation(args, model, valid_loader, epoch, scaler)
 
         save_model(model, optimizer, args, epoch)
 

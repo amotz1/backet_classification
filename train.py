@@ -4,7 +4,7 @@ import time
 import wandb
 
 
-def train(args, model, train_loader, epoch, optimizer):
+def train(args, model, train_loader, epoch, optimizer, scaler):
     model.train()
     device = torch.device('cuda')
     criterion = nn.CrossEntropyLoss(reduction='mean')
@@ -18,13 +18,15 @@ def train(args, model, train_loader, epoch, optimizer):
             target = target.to(device)
 
         optimizer.zero_grad()
-        output = model(input_data)
-        loss = criterion(output, target)
-        total_loss += loss
-        loss.backward()
-        optimizer.step()
+        with torch.cuda.amp.autocast():
+            output = model(input_data)
+            loss = criterion(output, target)
+        total_loss += loss.item()
+        scaler.scale(loss).loss.backward()
+        scaler.step(optimizer)
+        scaler.update()
         correct, accuracy = acc(output, target)
-        wandb.log({'epoch': epoch, 'train_avg_loss': total_loss/args.batch_size, 'accuracy': accuracy})
+        wandb.log({'epoch': epoch, 'train_avg_loss': total_loss/(batch_index+1), 'train_accuracy': accuracy})
 
 
 def acc(output, target):
