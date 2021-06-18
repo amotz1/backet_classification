@@ -22,7 +22,6 @@ def initialize(args):
     train_transforms = transforms.Compose([
         transforms.ToTensor(),
         transforms.Resize((224, 224)),
-        transforms.RandomFlip()
     ])
 
     train_params = {'num_workers': 2, 'batch_size': args.batch_size,'shuffle': True}

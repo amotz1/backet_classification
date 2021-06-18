@@ -22,11 +22,12 @@ def train(args, model, train_loader, epoch, optimizer, scaler):
             output = model(input_data)
             loss = criterion(output, target)
         total_loss += loss.item()
-        scaler.scale(loss).loss.backward()
+        scaler.scale(loss).backward()
         scaler.step(optimizer)
         scaler.update()
         correct, accuracy = acc(output, target)
-        wandb.log({'epoch': epoch, 'train_avg_loss': total_loss/(batch_index+1), 'train_accuracy': accuracy})
+        wandb.log({'epoch': epoch, 'train_avg_loss': total_loss/(batch_index+1), 'train_accuracy':
+                   correct/(batch_index+1)})
 
 
 def acc(output, target):

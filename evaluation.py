@@ -8,21 +8,21 @@ def evaluation(args, model, valid_loader, epoch, scaler):
     device = args.device
     model.to(device)
     criterion = nn.CrossEntropyLoss(reduction='mean')
-    valid_loss, correct,total = 0,0,0
+    valid_loss, correct = 0,0
 
     with torch.no_grad():
         for batch_index, input_tensor in enumerate(valid_loader):
             input_data, target = input_tensor
             input_data, target = input_data.to(device), target.to(device)
-            
+
             with torch.cuda.amp.autocast():
                 output = model(input_data)
                 valid_loss += criterion(output, target).item()
 
             _, predicted = torch.max(output.data, 1)
-            total += target.size(0)
             correct += (predicted == target).sum().item()
-            wandb.log({'epoch':epoch,'valid_avg_loss': valid_loss/(batch_index+1), 'val_accuracy': correct/total})
+            wandb.log({'epoch':epoch,'valid_avg_loss': valid_loss/(batch_index+1),
+                       'val_accuracy': correct/(batch_index+1)})
 
 
 
