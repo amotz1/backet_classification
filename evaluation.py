@@ -8,10 +8,11 @@ def evaluation(args, model, valid_loader, epoch, scaler):
     device = args.device
     model.to(device)
     criterion = nn.CrossEntropyLoss(reduction='mean')
-    valid_loss, correct = 0,0
+    valid_loss, correct, num_samples = 0,0,0
 
     with torch.no_grad():
         for batch_index, input_tensor in enumerate(valid_loader):
+            num_samples += args.batch_size
             input_data, target = input_tensor
             input_data, target = input_data.to(device), target.to(device)
 
@@ -21,8 +22,8 @@ def evaluation(args, model, valid_loader, epoch, scaler):
 
             _, predicted = torch.max(output.data, 1)
             correct += (predicted == target).sum().item()
-            wandb.log({'epoch':epoch,'valid_avg_loss': valid_loss/(batch_index+1),
-                       'val_accuracy': correct/(batch_index+1)})
+            wandb.log({'epoch':epoch, 'valid_avg_loss': valid_loss/num_samples,
+                       'val_accuracy': correct/num_samples})
 
 
 

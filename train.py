@@ -9,8 +9,9 @@ def train(args, model, train_loader, epoch, optimizer, scaler):
     device = torch.device('cuda')
     criterion = nn.CrossEntropyLoss(reduction='mean')
     total_loss = 0
-
+    num_samples = 0
     for batch_index, input_tensor in enumerate(train_loader):
+        num_samples += args.batch_size
         input_data, target = input_tensor
 
         if args.cuda:
@@ -21,13 +22,13 @@ def train(args, model, train_loader, epoch, optimizer, scaler):
         with torch.cuda.amp.autocast():
             output = model(input_data)
             loss = criterion(output, target)
-        total_loss += loss.item()
+        total_loss += loss.item()*target.size(0)
         scaler.scale(loss).backward()
         scaler.step(optimizer)
         scaler.update()
         correct, accuracy = acc(output, target)
-        wandb.log({'epoch': epoch, 'train_avg_loss': total_loss/(batch_index+1), 'train_accuracy':
-                   correct/(batch_index+1)})
+        wandb.log({'epoch': epoch, 'train_avg_loss': total_loss/num_samples, 'train_accuracy':
+                   correct/num_samples})
 
 
 def acc(output, target):
