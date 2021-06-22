@@ -5,6 +5,7 @@ from initialize import initialize
 from save_model import save_model
 from train import train
 from evaluation import evaluation
+from utils import RunningAverage
 
 
 def main():
@@ -16,8 +17,12 @@ def main():
     scaler = torch.cuda.amp.GradScaler()
     wandb.watch(model)
     for epoch in range(1, args.epochs_number + 1):
-        train(args, model, train_loader, epoch, optimizer, scaler)
-        evaluation(args, model, valid_loader, epoch, scaler)
+        run_avg = RunningAverage()
+        run_avg.reset_train()
+        run_avg.reset_val()
+
+        train(args, model, train_loader, epoch, optimizer, scaler, run_avg)
+        evaluation(args, model, valid_loader, epoch, scaler, run_avg)
 
         save_model(model, optimizer, args, epoch)
 

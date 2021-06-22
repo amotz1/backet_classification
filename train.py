@@ -1,17 +1,17 @@
 import torch
 from torch import nn
 import time
+from utils import RunningAverage
+from utils import acc
 import wandb
 
 
-def train(args, model, train_loader, epoch, optimizer, scaler):
+def train(args, model, train_loader, epoch, optimizer, scaler, run_avg):
     model.train()
     device = torch.device('cuda')
     criterion = nn.CrossEntropyLoss(reduction='mean')
-    total_loss = 0
-    num_samples = 0
+
     for batch_index, input_tensor in enumerate(train_loader):
-        num_samples += args.batch_size
         input_data, target = input_tensor
 
         if args.cuda:
@@ -22,23 +22,18 @@ def train(args, model, train_loader, epoch, optimizer, scaler):
         with torch.cuda.amp.autocast():
             output = model(input_data)
             loss = criterion(output, target)
-        total_loss += loss.item()*target.size(0)
+
+        run_avg = RunningAverage()
+        run_avg.update_train_loss_avg(loss.item(), args.batch_size)
         scaler.scale(loss).backward()
         scaler.step(optimizer)
         scaler.update()
-        correct, accuracy = acc(output, target)
-        wandb.log({'epoch': epoch, 'train_avg_loss': total_loss/num_samples, 'train_accuracy':
-                   correct/num_samples})
+        accuracy = acc(output, target)
+        run_avg.update_train_acc_avg(accuracy, args.batch_size)
+        wandb.log({'epoch': epoch, 'train_avg_loss': run_avg.train_loss_run_avg, 'train_accuracy':
+                   run_avg.train_loss_run_avg})
 
 
-def acc(output, target):
-    with torch.no_grad():
-        pred = torch.argmax(output, dim=1)
-
-        assert pred.shape[0] == len(target)
-        correct = 0
-        correct += torch.sum(pred == target).item()
-        return correct, correct/len(target)
 
 
 
