@@ -15,7 +15,7 @@ def main():
     wandb.config.update(args)
     torch.backends.cudnn.benchmark = True
 
-    if os.path.exists(args.savepath + '/' + 'backet_net.pt'):
+    if os.path.exists(args.save + '/' + 'backet_net.pt'):
         loaded_model = True
     else:
         loaded_model = False
