@@ -77,7 +77,8 @@ def save_checkpoint(model, optimizer, args, epoch):
 def load_checkpoint(check_point):
     torch.load(check_point)
 
-    model.load_state_dict(check_point['state_dict'])
-    optimizer.load_state_dict(check_point['optimizer'])
+    model = model.load_state_dict(check_point['state_dict'])
+    print(model)
+    optimizer = optimizer.load_state_dict(check_point['optimizer'])
 
-    return
+    return model, optimizer
