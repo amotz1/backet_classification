@@ -21,9 +21,11 @@ def evaluation(args, model, valid_loader, epoch, scaler, run_avg):
 
             run_avg = RunningAverage()
             run_avg.update_val_loss_avg(valid_loss.item(), args.batch_size)
-            _, predicted = torch.max(output.data, 1)
             accuracy = acc(output, target)
             run_avg.update_val_acc_avg(accuracy, args.batch_size)
+
+            if batch_index % 10 == 9:
+                print('epoch', epoch, 'val_loss = ',run_avg.val_loss_run_avg, ' accuracy =', run_avg.val_acc_run_avg)
             wandb.log({'epoch': epoch, 'valid_avg_loss': run_avg.val_loss_run_avg,
                        'val_accuracy': run_avg.val_acc_run_avg})
 
