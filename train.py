@@ -32,7 +32,7 @@ def train(args, model, train_loader, epoch, optimizer, scaler, run_avg):
         run_avg.update_train_acc_avg(accuracy, args.batch_size)
 
         if batch_index % 10 == 9:
-            print('epoch =', epoch + ' ', 'train_loss = ', run_avg.train_loss_run_avg, ' accuracy =', run_avg.train_acc_run_avg)
+            print('epoch =', epoch, ' train_loss = ', run_avg.train_loss_run_avg, ' accuracy =', run_avg.train_acc_run_avg)
         wandb.log({'epoch': epoch, 'train_avg_loss': run_avg.train_loss_run_avg, 'train_accuracy':
                    run_avg.train_acc_run_avg})
 
