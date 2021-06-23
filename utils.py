@@ -1,4 +1,5 @@
 import torch
+import os
 
 
 class RunningAverage:
@@ -62,3 +63,21 @@ def acc(output, target):
         correct = 0
         correct += torch.sum(pred == target).item()
         return correct/len(target)
+
+
+def save_checkpoint(model, optimizer, args, epoch):
+    save_path = args.save
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+
+    torch.save({'epoch': epoch, 'mode_state_dict': model.state_dict,
+                'optimizer_state_dict': optimizer.state_dict}, save_path + '/' + 'backet_net.pt')
+
+
+def load_checkpoint(check_point):
+    torch.load(check_point)
+
+    model.load_state_dict(check_point['state_dict'])
+    optimizer.load_state_dict(check_point['optimizer'])
+
+    return

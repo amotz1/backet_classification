@@ -4,25 +4,37 @@ import torch
 from model import CNN
 import torch.optim as optim
 from torchvision import datasets, transforms
-
+from utils import load_checkpoint
 import os
 
 
-def initialize(args):
+def initialize(args, loaded_model):
     if args.device is not None:
         os.environ["CUDA_VISIBLE_DEVICES"] = str(args.device)
 
-    model = select_model(args)
+    if not loaded_model:
+        model = select_model(args)
 
-    optimizer = select_optimizer(args,model)
+    else:
+        model = select_model(args)
+        load_checkpoint(args.savepath + '/' + 'backet_net.pt')
+
+    optimizer = select_optimizer(args, model)
 
     if args.cuda:
         model.to(args.device)
 
-    train_transforms = transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Resize((224, 224)),
-    ])
+    if loaded_model is False:
+        train_transforms = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Resize((224, 224)),
+        ])
+
+    else:
+        train_transforms = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Resize((512, 512)),
+        ])
 
     train_params = {'num_workers': 2, 'batch_size': args.batch_size,'shuffle': True}
     valid_params = {'num_workers': 2, 'batch_size': args.batch_size, 'shuffle': True}

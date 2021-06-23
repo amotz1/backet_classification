@@ -2,10 +2,11 @@ import torch
 import argparse
 import wandb
 from initialize import initialize
-from save_model import save_model
 from train import train
 from evaluation import evaluation
 from utils import RunningAverage
+from utils import save_checkpoint
+import os
 
 
 def main():
@@ -13,18 +14,28 @@ def main():
     wandb.init()
     wandb.config.update(args)
     torch.backends.cudnn.benchmark = True
-    [train_loader, valid_loader, model, optimizer] = initialize(args)
+
+    if os.path.exists(args.savepath + '/' + 'backet_net.pt'):
+        loaded_model = True
+    else:
+        loaded_model = False
+
+    [train_loader, valid_loader, model, optimizer] = initialize(args, loaded_model)
     scaler = torch.cuda.amp.GradScaler()
+
     wandb.watch(model)
+    best_acc = 0
     for epoch in range(1, args.epochs_number + 1):
         run_avg = RunningAverage()
         run_avg.reset_train()
         run_avg.reset_val()
 
         train(args, model, train_loader, epoch, optimizer, scaler, run_avg)
-        evaluation(args, model, valid_loader, epoch, scaler, run_avg)
+        acc = evaluation(args, model, valid_loader, epoch, run_avg)
 
-        save_model(model, optimizer, args, epoch)
+        if best_acc < acc:
+            best_acc = acc
+            save_checkpoint(model, optimizer, args, epoch)
 
 
 def get_args():

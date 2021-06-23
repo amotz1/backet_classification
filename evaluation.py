@@ -4,7 +4,8 @@ import wandb
 from utils import RunningAverage
 from utils import acc
 
-def evaluation(args, model, valid_loader, epoch, scaler, run_avg):
+
+def evaluation(args, model, valid_loader, epoch, run_avg):
     model.eval()
     device = args.device
     model.to(device)
@@ -19,7 +20,6 @@ def evaluation(args, model, valid_loader, epoch, scaler, run_avg):
                 output = model(input_data)
                 valid_loss = criterion(output, target)
 
-            run_avg = RunningAverage()
             run_avg.update_val_loss_avg(valid_loss.item(), args.batch_size)
             accuracy = acc(output, target)
             run_avg.update_val_acc_avg(accuracy, args.batch_size)
@@ -28,6 +28,8 @@ def evaluation(args, model, valid_loader, epoch, scaler, run_avg):
                 print('epoch', epoch, 'val_loss = ',run_avg.val_loss_run_avg, ' accuracy =', run_avg.val_acc_run_avg)
             wandb.log({'epoch': epoch, 'valid_avg_loss': run_avg.val_loss_run_avg,
                        'val_accuracy': run_avg.val_acc_run_avg})
+
+        return run_avg.val_acc_run_avg
 
 
 

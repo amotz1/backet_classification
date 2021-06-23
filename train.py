@@ -23,7 +23,6 @@ def train(args, model, train_loader, epoch, optimizer, scaler, run_avg):
             output = model(input_data)
             loss = criterion(output, target)
 
-        run_avg = RunningAverage()
         run_avg.update_train_loss_avg(loss.item(), args.batch_size)
         scaler.scale(loss).backward()
         scaler.step(optimizer)
