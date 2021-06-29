@@ -17,12 +17,15 @@ def initialize(args, loaded_model):
         optimizer = select_optimizer(args, model)
 
     else:
-        model, optimizer = load_checkpoint(args.savepath + '/' + 'backet_net.pt')
+        model = select_model(args)
+        optimizer = select_optimizer(args, model)
+        model, optimizer = load_checkpoint(args.save + '/' + 'backet_net.pt')
 
         for param in model.parameters():
             param.requires_grad = False
 
         print(model)
+        model.fc = nn.Linear(512, 10)
 
     if args.cuda:
         model.to(args.device)
