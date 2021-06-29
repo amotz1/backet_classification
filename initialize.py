@@ -19,9 +19,14 @@ def initialize(args, loaded_model):
     else:
         model = select_model(args)
         optimizer = select_optimizer(args, model)
-        model, optimizer = load_checkpoint(args.save + '/' + 'backet_net.pt')
 
-        for param in model.parameters():
+        model_state_dict, optimizer_state_dict = load_checkpoint(args.save + '/' + 'backet_net.pt')
+
+        model.load_state_dict(model_state_dict)
+        optimizer.load_state_dict(optimizer_state_dict)
+
+
+    for param in model.parameters():
             param.requires_grad = False
 
         print(model)
