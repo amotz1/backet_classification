@@ -70,8 +70,8 @@ def save_checkpoint(model, optimizer, args, epoch):
     if not os.path.exists(save_path):
         os.makedirs(save_path)
 
-    torch.save({'epoch': epoch, 'mode_state_dict': model.state_dict,
-                'optimizer_state_dict': optimizer.state_dict}, save_path + '/' + 'backet_net.pt')
+    torch.save({'epoch': epoch, 'mode_state_dict': model.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict()}, save_path + '/' + 'backet_net.pt')
 
 
 def load_checkpoint(check_point):

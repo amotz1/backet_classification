@@ -29,7 +29,6 @@ def initialize(args, loaded_model):
     for param in model.parameters():
             param.requires_grad = False
 
-        print(model)
         model.fc = nn.Linear(512, 10)
 
     if args.cuda:
