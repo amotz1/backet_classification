@@ -25,8 +25,7 @@ def initialize(args, loaded_model):
         model.load_state_dict(model_state_dict)
         optimizer.load_state_dict(optimizer_state_dict)
 
-
-    for param in model.parameters():
+        for param in model.parameters():
             param.requires_grad = False
 
         model.fc = nn.Linear(512, 10)
