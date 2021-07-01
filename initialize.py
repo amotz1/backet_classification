@@ -18,17 +18,26 @@ def initialize(args, loaded_model):
 
     else:
         model = select_model(args)
-        optimizer = select_optimizer(args, model)
-
-        model_state_dict, optimizer_state_dict = load_checkpoint(args.save + '/' + 'backet_net.pt')
-
-        model.load_state_dict(model_state_dict)
-        optimizer.load_state_dict(optimizer_state_dict)
 
         for param in model.parameters():
             param.requires_grad = False
 
         model.fc = nn.Linear(512, 10)
+
+        model_state_dict, optimizer_state_dict = load_checkpoint(args.save + '/' + 'backet_net.pt')
+
+        model.load_state_dict(model_state_dict)
+
+        params_to_update = []
+        for name, param in model.named_parameters():
+            if param.requires_grad:
+                params_to_update.append(param)
+
+        optimizer = optim.Adam(params_to_update, args.lr, weight_decay=args.weight_decay)
+        optimizer.load_state_dict(optimizer_state_dict)
+
+
+
 
     if args.cuda:
         model.to(args.device)
