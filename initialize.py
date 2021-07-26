@@ -1,6 +1,7 @@
 from backet_dataset import BacketDataset
 from torch.utils.data import DataLoader
 import torch
+from torch import nn
 from model import CNN
 import torch.optim as optim
 from torchvision import datasets, transforms
@@ -32,12 +33,10 @@ def initialize(args, loaded_model):
         for name, param in model.named_parameters():
             if param.requires_grad:
                 params_to_update.append(param)
+                print("\t", name)
 
         optimizer = optim.Adam(params_to_update, args.lr, weight_decay=args.weight_decay)
         optimizer.load_state_dict(optimizer_state_dict)
-
-
-
 
     if args.cuda:
         model.to(args.device)
@@ -46,12 +45,14 @@ def initialize(args, loaded_model):
         train_transforms = transforms.Compose([
             transforms.ToTensor(),
             transforms.Resize((224, 224)),
+            transforms.Normalize([0.2858, 0.2858, 0.2858], [0.2869, 0.2869, 0.2869])
         ])
 
     else:
         train_transforms = transforms.Compose([
             transforms.ToTensor(),
-            transforms.Resize((512, 512)),
+            transforms.Resize((224, 224)),
+            transforms.Normalize([0.2858, 0.2858, 0.2858], [0.2869, 0.2869, 0.2869]),
         ])
 
     train_params = {'num_workers': 2, 'batch_size': args.batch_size,'shuffle': True}

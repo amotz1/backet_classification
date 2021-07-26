@@ -15,10 +15,7 @@ def main():
     wandb.config.update(args)
     torch.backends.cudnn.benchmark = True
 
-    if os.path.exists(args.save + '/' + 'backet_net.pt'):
-        loaded_model = True
-    else:
-        loaded_model = False
+    loaded_model = False
 
     [train_loader, valid_loader, model, optimizer] = initialize(args, loaded_model)
     scaler = torch.cuda.amp.GradScaler()

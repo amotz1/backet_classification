@@ -1,7 +1,6 @@
 import torch
 from torch import nn
 import time
-from utils import RunningAverage
 from utils import acc
 import wandb
 
