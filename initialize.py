@@ -15,6 +15,7 @@ def initialize(args, loaded_model):
 
     if not loaded_model:
         model = select_model(args)
+        print(model)
         optimizer = select_optimizer(args, model)
 
     else:

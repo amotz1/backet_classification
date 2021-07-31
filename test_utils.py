@@ -1,6 +1,4 @@
-
 from utils import RunningAverage
-
 
 def test_running_average():
     train_losses = [1, 0.5, 0.3]

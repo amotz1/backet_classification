@@ -22,16 +22,16 @@ def main():
 
     wandb.watch(model)
     best_acc = 0
+    run_avg = RunningAverage()
     for epoch in range(1, args.epochs_number + 1):
-        run_avg = RunningAverage()
         run_avg.reset_train()
         run_avg.reset_val()
 
         train(args, model, train_loader, epoch, optimizer, scaler, run_avg)
-        acc = evaluation(args, model, valid_loader, epoch, run_avg)
+        val_acc = evaluation(args, model, valid_loader, epoch, run_avg)
 
-        if best_acc < acc:
-            best_acc = acc
+        if best_acc < val_acc:
+            best_acc = val_acc
             save_checkpoint(model, optimizer, args, epoch)
 
 
