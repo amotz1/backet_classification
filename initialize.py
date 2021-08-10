@@ -2,7 +2,7 @@ from backet_dataset import BacketDataset
 from torch.utils.data import DataLoader
 import torch
 from torch import nn
-from model import CNN
+from model import CNN, Lenet5
 import torch.optim as optim
 from torchvision import datasets, transforms
 from utils import load_checkpoint
@@ -70,10 +70,13 @@ def initialize(args, loaded_model):
 
 def select_model(args):
     if args.model == "resnet18":
-        return CNN(args.classes, args.model)
+        return CNN(args.classes)
 
-    else
+    elif args.model == "Lenet5":
+        return Lenet5(args.classes)
 
+    else:
+        assert False, "unspecified model"
 
 
 def select_optimizer(args, model):

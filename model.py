@@ -4,7 +4,7 @@ from torchvision import models
 
 
 class CNN(nn.Module):
-    def __init__(self, classes, model='resnet18'):
+    def __init__(self, classes):
         super(CNN, self).__init__()
 
         self.cnn = models.resnet18(pretrained=False)
@@ -24,7 +24,7 @@ class Lenet5(nn.Module):
         self.maxpool2 = torch.MaxPool2d(kernel_size=2, stride=2)
         self.cnn3 = torch.Conv2d(5, 1, kernel_size=5, stride=1)
         self.linear1 = torch.Linear(120, 84)
-        self.linear2 = torch.Linear(84, 10)
+        self.linear2 = torch.Linear(84, classes)
 
     def forward(self, x):
         x = self.cnn1(x)
