@@ -46,7 +46,6 @@ def initialize(args, loaded_model):
         train_transforms = transforms.Compose([
             transforms.ToTensor(),
             transforms.Resize((224, 224)),
-            transforms.RandomHorizontalFlip(p=0.5),
             transforms.Normalize([0.2858, 0.2858, 0.2858], [0.2869, 0.2869, 0.2869])
         ])
 
@@ -70,7 +69,11 @@ def initialize(args, loaded_model):
 
 
 def select_model(args):
-    return CNN(args.classes, args.model)
+    if args.model == "resnet18":
+        return CNN(args.classes, args.model)
+
+    else
+
 
 
 def select_optimizer(args, model):
