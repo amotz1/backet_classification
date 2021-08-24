@@ -22,7 +22,7 @@ class Lenet5(nn.Module):
         self.maxpool1 = nn.MaxPool2d(kernel_size=2, stride=2)
         self.cnn2 = nn.Conv2d(6, 16, kernel_size=5, stride=1)
         self.maxpool2 = nn.MaxPool2d(kernel_size=2, stride=2)
-        self.cnn3 = nn.Conv2d(5, 1, kernel_size=5, stride=1)
+        self.cnn3 = nn.Conv2d(16, 1, kernel_size=5, stride=1)
         self.linear1 = nn.Linear(120, 84)
         self.linear2 = nn.Linear(84, classes)
 

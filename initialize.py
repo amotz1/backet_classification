@@ -42,20 +42,22 @@ def initialize(args, loaded_model):
     if args.cuda:
         model.to(args.device)
 
-    if loaded_model is False:
+    if args.model == "resnet18":
         train_transforms = transforms.Compose([
             transforms.ToTensor(),
             transforms.Resize((224, 224)),
             transforms.Normalize([0.2858, 0.2858, 0.2858], [0.2869, 0.2869, 0.2869])
         ])
 
-    else:
+    elif args.model == "Lenet5":
         train_transforms = transforms.Compose([
+            transforms.Resize((32, 32)),
             transforms.ToTensor(),
-            transforms.Resize((224, 224)),
-            transforms.Normalize([0.2858, 0.2858, 0.2858], [0.2869, 0.2869, 0.2869]),
         ])
 
+    else:
+        assert False, "unspecified model"
+        
     train_params = {'num_workers': 2, 'batch_size': args.batch_size,'shuffle': True}
     valid_params = {'num_workers': 2, 'batch_size': args.batch_size, 'shuffle': True}
 
