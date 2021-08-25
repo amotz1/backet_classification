@@ -57,7 +57,7 @@ def initialize(args, loaded_model):
 
     else:
         assert False, "unspecified model"
-        
+
     train_params = {'num_workers': 2, 'batch_size': args.batch_size,'shuffle': True}
     valid_params = {'num_workers': 2, 'batch_size': args.batch_size, 'shuffle': True}
 
