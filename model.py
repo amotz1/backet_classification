@@ -18,27 +18,33 @@ class Lenet5(nn.Module):
     def __init__(self, classes):
         super(Lenet5, self).__init__()
 #         declare layers
-        self.cnn1 = nn.Conv2d(1, 6, kernel_size=5, stride=1)
+        self.cnn1 = nn.Conv2d(3, 6, kernel_size=5, stride=1)
+        self.batch1 = nn.BatchNorm2d(6)
         self.relu1 = nn.ReLU()
         self.maxpool1 = nn.MaxPool2d(kernel_size=2, stride=2)
         self.cnn2 = nn.Conv2d(6, 16, kernel_size=5, stride=1)
+        self.batch2 = nn.BatchNorm2d(6)
         self.relu2 = nn.ReLU()
         self.maxpool2 = nn.MaxPool2d(kernel_size=2, stride=2)
         self.cnn3 = nn.Conv2d(16, 120, kernel_size=5, stride=1)
-        self.relu1 = nn.ReLU()
+        self.batch1 = nn.BatchNorm2d(120)
+        self.relu3 = nn.ReLU()
         self.linear1 = nn.Linear(120, 84)
         self.linear2 = nn.Linear(84, classes)
 
     def forward(self, x):
         x = self.cnn1(x)
+        x = self.batch1(x)
         x = self.relu1(x)
         x = self.maxpool1(x)
 
         x = self.cnn2(x)
+        x = self.batch2(x)
         x = self.relu2(x)
         x = self.maxpool2(x)
 
         x = self.cnn3(x)
+        x = self.batch3(x)
         x = self.relu3(x)
         x = x.reshape(x.shape[0], -1)
 
