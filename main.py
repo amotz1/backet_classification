@@ -41,7 +41,7 @@ def get_args():
     parser.add_argument('--dataset_name', type=str, default='shape_class', help='dataset_name')
     parser.add_argument('--epochs_number', type=int, default=8, help='epoch number for training')
     parser.add_argument('--classes', type=int, default=10, help='dataset_classes')
-    parser.add_argument('--lr', type=int, default=0.01, help='learning rate')
+    parser.add_argument('--lr', type=int, default=0.001, help='learning rate')
     parser.add_argument('--device', type=int, default=0, help='gpu device')  # default is 0
     parser.add_argument('--weight_decay', type=int, default=1e-7, help='dropout')
     parser.add_argument('--cuda', action='store_true', default=True, help='gpu for training acceleration')

@@ -30,6 +30,7 @@ class Lenet5(nn.Module):
         self.batch3 = nn.BatchNorm2d(120)
         self.relu3 = nn.ReLU()
         self.linear1 = nn.Linear(120, 84)
+        self.relu4 = nn.ReLU()
         self.linear2 = nn.Linear(84, classes)
 
     def forward(self, x):
@@ -49,6 +50,7 @@ class Lenet5(nn.Module):
         x = x.reshape(x.shape[0], -1)
 
         x = self.linear1(x)
+        x = self.relu4(x)
         x = self.linear2(x)
 
         return x
