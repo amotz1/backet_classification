@@ -49,7 +49,7 @@ class Lenet5(nn.Module):
         # x = self.cnn3(x)
         # x = self.batch3(x)
         # x = self.relu3(x)
-        x = self.maxpool3(self.relu3(self.batch3(self.cnn3(x))))
+        x = self.relu3(self.batch3(self.cnn3(x)))
 
         x = x.reshape(x.shape[0], -1)
 
