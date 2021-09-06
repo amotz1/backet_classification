@@ -34,26 +34,42 @@ class Lenet5(nn.Module):
         self.linear2 = nn.Linear(84, classes)
 
     def forward(self, x):
-        x = self.cnn1(x)
-        x = self.batch1(x)
-        x = self.relu1(x)
-        x = self.maxpool1(x)
+        # x = self.cnn1(x)
+        # x = self.batch1(x)
+        # x = self.relu1(x)
+        # x = self.maxpool1(x)
+        x = self.maxpool1(self.relu1(self.batch1(self.cnn1(x))))
+        #
+        # x = self.cnn2(x)
+        # x = self.batch2(x)
+        # x = self.relu2(x)
+        # x = self.maxpool2(x)
+        x = self.maxpool2(self.relu2(self.batch2(self.cnn2(x))))
 
-        x = self.cnn2(x)
-        x = self.batch2(x)
-        x = self.relu2(x)
-        x = self.maxpool2(x)
+        # x = self.cnn3(x)
+        # x = self.batch3(x)
+        # x = self.relu3(x)
+        x = self.maxpool3(self.relu3(self.batch3(self.cnn3(x))))
 
-        x = self.cnn3(x)
-        x = self.batch3(x)
-        x = self.relu3(x)
         x = x.reshape(x.shape[0], -1)
 
-        x = self.linear1(x)
-        x = self.relu4(x)
-        x = self.linear2(x)
+        # x = self.linear1(x)
+        # x = self.relu4(x)
+        # x = self.linear2(x)
+        x = self.linaer2(self.relu4(self.linear1(x)))
 
         return x
 
 #         declare forward pass (how model influence the tensors)
 
+class FullyConnected(nn.Module):
+    def __init__(self, classes):
+        super(FullyConnected, self).__init__()
+        self.linear1 = nn.Linear(64*64, 300)
+        self.linear2 = nn.Linear(300, 100)
+        self.linear3 = nn.Linear(100, 10)
+
+    def forward(self, x):
+        x = self.linear3(self.linear2(self.linear1(x)))
+
+        return x
