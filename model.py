@@ -56,7 +56,7 @@ class Lenet5(nn.Module):
         # x = self.linear1(x)
         # x = self.relu4(x)
         # x = self.linear2(x)
-        x = self.linaer2(self.relu4(self.linear1(x)))
+        x = self.linear2(self.relu4(self.linear1(x)))
 
         return x
 
@@ -65,11 +65,19 @@ class Lenet5(nn.Module):
 class FullyConnected(nn.Module):
     def __init__(self, classes):
         super(FullyConnected, self).__init__()
-        self.linear1 = nn.Linear(64*64, 300)
+        self.linear1 = nn.Linear(3*64*10, 300)
+        self.batch1 = nn.BatchNorm1d(300)
+        self.dropout1 = nn.Dropout(p=0.5)
+        self.relu1 = nn.ReLU()
         self.linear2 = nn.Linear(300, 100)
-        self.linear3 = nn.Linear(100, 10)
+        self.batch2 = nn.BatchNorm1d(100)
+        self.dropout2 = nn.Dropout(p=0.5)
+        self.relu2 = nn.ReLU()
+        self.linear3 = nn.Linear(100, classes)
 
     def forward(self, x):
-        x = self.linear3(self.linear2(self.linear1(x)))
+        x = x.reshape(x.shape[0], -1)
+        x = self.relu1(self.batch1(self.dropout1(self.linear1(x)))
+        x = self.relu2(self.batch2(self.dropout2(self.linear2(x))))
 
         return x

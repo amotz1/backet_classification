@@ -2,7 +2,7 @@ from backet_dataset import BacketDataset
 from torch.utils.data import DataLoader
 import torch
 from torch import nn
-from model import CNN, Lenet5
+from model import CNN, Lenet5, FullyConnected
 import torch.optim as optim
 from torchvision import datasets, transforms
 from utils import load_checkpoint
@@ -51,9 +51,14 @@ def initialize(args, loaded_model):
 
     elif args.model == "Lenet5":
         train_transforms = transforms.Compose([
-            transforms.Resize((32, 32)),
             transforms.ToTensor(),
         ])
+
+    elif args.model == "FullyConnected":
+        train_transforms = transforms.Compose([
+            transforms.ToTensor(),
+        ])
+
 
     else:
         assert False, "unspecified model"
@@ -76,6 +81,9 @@ def select_model(args):
 
     elif args.model == "Lenet5":
         return Lenet5(args.classes)
+
+    elif args.model == "FullyConnected":
+        return FullyConnected(args.classes)
 
     else:
         assert False, "unspecified model"
