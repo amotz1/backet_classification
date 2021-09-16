@@ -1,6 +1,11 @@
 from model import Lenet5, FullyConnected, CNN
 from torch_lr_finder.lr_finder import LRFinder
 from utils import get_args
+import torch
+from torch import nn
+from torchvision import datasets, transforms
+from torch.utils.data import DataLoader
+from torch_lr_finder import LRFinder
 from initialize import select_model, select_optimizer, get_transforms
 import argparse
 

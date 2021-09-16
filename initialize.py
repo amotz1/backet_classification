@@ -104,6 +104,8 @@ def select_optimizer(args, model):
     elif args.opt == 'rmsprop':
         return optim.RMSprop(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
+    elif args.opt == 'adamw':
+        return torch.optim.AdamW(betas=(0.9, 0.99), eps=1e-5, weight_decay=1e-2)
     else:
         assert False, "unspecified optimizer"
 

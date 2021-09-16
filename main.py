@@ -23,7 +23,11 @@ def main():
     wandb.watch(model)
     best_acc = 0
     run_avg = RunningAverage()
-    scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0.001, max_lr=0.1)
+
+    if args.optimizer == 'adamw':
+        scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0.001, max_lr=0.1)
+    else:
+        torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0.001, max_lr=0.1, cyclic_momentum=False)
 
     for epoch in range(1, args.epochs_number + 1):
         run_avg.reset_train()

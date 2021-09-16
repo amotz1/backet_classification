@@ -95,7 +95,7 @@ def get_args():
     parser.add_argument('--weight_decay', type=int, default=1e-7, help='dropout')
     parser.add_argument('--cuda', action='store_true', default=True, help='gpu for training acceleration')
     parser.add_argument('--model', type=str, default='Lenet5')
-    parser.add_argument('--opt', type=str, default='adam', choices=('sgd','adam','rmsprop'))
+    parser.add_argument('--opt', type=str, default='adamw', choices=('sgd','adam','rmsprop'))
     parser.add_argument('--root_path', type=str, default='/content/MnistData', help='path to dataset')
     parser.add_argument('--save', type=str, default='/content/save/backetnet', help='path to checkpoint save directory')
 
