@@ -42,28 +42,9 @@ def initialize(args, loaded_model):
     if args.cuda:
         model.to(args.device)
 
-    if args.model == "resnet18":
-        train_transforms = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Resize((224, 224)),
-            transforms.Normalize([0.2858, 0.2858, 0.2858], [0.2869, 0.2869, 0.2869])
-        ])
+    train_transforms = get_transforms(args)
 
-    elif args.model == "Lenet5":
-        train_transforms = transforms.Compose([
-            transforms.ToTensor(),
-        ])
-
-    elif args.model == "FullyConnected":
-        train_transforms = transforms.Compose([
-            transforms.ToTensor(),
-        ])
-
-
-    else:
-        assert False, "unspecified model"
-
-    train_params = {'num_workers': 2, 'batch_size': args.batch_size,'shuffle': True}
+    train_params = {'num_workers': 2, 'batch_size': args.batch_size, 'shuffle': True}
     valid_params = {'num_workers': 2, 'batch_size': args.batch_size, 'shuffle': True}
 
     train_generator = datasets.ImageFolder(args.root_path + '/' + 'train', train_transforms)
@@ -88,6 +69,29 @@ def select_model(args):
     else:
         assert False, "unspecified model"
 
+
+def get_transforms(args):
+    if args.model == "resnet18":
+        train_transforms = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Resize((224, 224)),
+            transforms.Normalize([0.2858, 0.2858, 0.2858], [0.2869, 0.2869, 0.2869])
+        ])
+
+    elif args.model == "Lenet5":
+        train_transforms = transforms.Compose([
+            transforms.ToTensor(),
+        ])
+
+    elif args.model == "FullyConnected":
+        train_transforms = transforms.Compose([
+            transforms.ToTensor(),
+        ])
+
+    else:
+        assert False, "unspecified model"
+
+    return train_transforms
 
 def select_optimizer(args, model):
     if args.opt == 'sgd':
