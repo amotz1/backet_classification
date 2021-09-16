@@ -67,17 +67,15 @@ class FullyConnected(nn.Module):
         super(FullyConnected, self).__init__()
         self.linear1 = nn.Linear(3*64*10, 300)
         self.batch1 = nn.BatchNorm1d(300)
-        self.dropout1 = nn.Dropout(p=0.5)
         self.relu1 = nn.ReLU()
         self.linear2 = nn.Linear(300, 100)
         self.batch2 = nn.BatchNorm1d(100)
-        self.dropout2 = nn.Dropout(p=0.5)
         self.relu2 = nn.ReLU()
         self.linear3 = nn.Linear(100, classes)
 
     def forward(self, x):
         x = x.reshape(x.shape[0], -1)
-        x = self.relu1(self.batch1(self.dropout1(self.linear1(x)))
-        x = self.relu2(self.batch2(self.dropout2(self.linear2(x))))
+        x = self.relu1(self.batch1(self.linear1(x)))
+        x = self.relu2(self.batch2(self.linear2(x)))
 
         return x
