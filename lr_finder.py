@@ -1,7 +1,6 @@
 from model import Lenet5, FullyConnected, CNN
 from torch_lr_finder.lr_finder import LRFinder
 from initialize import select_model, select_optimizer, get_transforms
-from main import get_args
 import argparse
 
 def lf():
