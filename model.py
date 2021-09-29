@@ -3,6 +3,16 @@ import torch.nn as nn
 from torchvision import models
 
 
+def crop_fm(fm, tfm):
+    target_size = tfm.size()[2]
+    tensor_size = fm.size()[2]
+
+    delta_size = tensor_size - target_size
+    delta_size = delta_size//2
+
+    return fm[:, :, delta_size: tensor_size-delta_size, delta_size: tensor_size-delta_size]
+
+
 class CNN(nn.Module):
     def __init__(self, classes):
         super(CNN, self).__init__()
@@ -79,3 +89,85 @@ class FullyConnected(nn.Module):
         x = self.relu2(self.batch2(self.linear2(x)))
 
         return x
+
+
+class UnetDownSampleLayer(nn.Module):
+    def __init__(self, in_chan, out_chan):
+        super(UnetDownSampleLayer, self).__init__()
+        self.conv_block = nn.Sequential(nn.Conv2d(in_chan, out_chan,  kernel_size=3),
+                                        nn.ReLU(),
+                                        nn.Conv2d(out_chan, out_chan,  kernel_size=3),
+                                        nn.ReLU())
+
+    def forward(self, x):
+        x = self.conv_block(x)
+        return x
+
+
+class UnetUpSampleLayer(nn.Module):
+    def __init__(self,in_chans, out_chans):
+        super(UnetUpSampleLayer, self).__init__()
+        self.transpose_conv = nn.ConvTranspose2d(in_chans = in_chans, out_chans = out_chans, kernel_size=2, stride=2)
+
+    def forward(self, x):
+        x = self.transpose_conv(x)
+        return x
+
+
+class UnetDoubleConvLayer:
+    def __init__(self, in_chan, out_chan):
+        super(UnetDoubleConvLayer, self).__init__()
+        self.conv1 = nn.Conv2d(in_chan, out_chan/2, kernel_size=3)
+        self.conv2 = nn.Conv2d(out_chan/2, out_chan/2, kernel_size=3)
+
+    def forward(self, x):
+        x = self.conv2(self.conv1(x))
+        return x
+
+
+class Unet(nn.Module):
+    def __init__(self):
+        super(Unet, self).__init__()
+        self.maxpool = nn.MaxPool(kernel_size=2, stride=2)
+        self.UnetDownSampleLayer1 = UnetDownSampleLayer(1, 64)
+        self.UnetDownSampleLayer2 = UnetDownSampleLayer(64, 128)
+        self.UnetDownSampleLayer3 = UnetDownSampleLayer(128, 256)
+        self.UnetDownSampleLayer4 = UnetDownSampleLayer(256, 512)
+        self.UnetDownSampleLayer5 = UnetDownSampleLayer(512, 1024)
+
+        self.UnetUpSampleLayer1 = UnetUpSampleLayer(1024, 512)
+        self.conv1 = UnetDoubleConvLayer(1024, 512)
+        self.UnetUpSampleLayer2 = UnetUpSampleLayer(512, 256)
+        self.conv2 = UnetDoubleConvLayer(512, 256)
+        self.UnetUpSampleLayer3 = UnetUpSampleLayer(256, 128)
+        self.conv3 = UnetDoubleConvLayer(256, 128)
+        self.UnetUpSampleLayer4 = UnetUpSampleLayer(128, 64)
+        self.conv4 = UnetDoubleConvLayer(128, 64)
+        self.conv5 = nn.Conv2d(64, 2, kernel_size=1)
+
+    def forward(self, image):
+        x1 = self.UnetDownSampleLayer1(image)
+        x2 = self.maxpool(x1)
+        x2 = self.UnetDownSampleLayer2(x2)
+        x3 = self.maxpool(x2)
+        x3 = self.UnetDownSampleLayer3(x3)
+        x4 = self.maxpool(x3)
+        x4 = self.UnetDownSampleLayer4(x4)
+        x5 = self.maxpool(x4)
+
+        output = torch.cat(crop_fm(x4, self.UnetUpSampleLayer1(x5)), self.UnetUpSampleLayer1(x5))
+        output = self.conv1(output)
+        output = torch.cat(crop_fm(x3, self.UnetUpSampleLayer2(output)), self.UnetUpSampleLayer2(output))
+        output = self.conv2(output)
+        output = torch.cat(crop_fm(x2, self.UnetUpSampleLayer2(output)), self.UnetUpSampleLayer3(output))
+        output = self.conv3(output)
+        output = torch.cat(crop_fm(x1, self.UnetUpSampleLayer2(output)), self.UnetUpSampleLayer4(output))
+        output = self.conv4(output)
+        output = self.conv5(output)
+
+        return output
+
+
+
+
+

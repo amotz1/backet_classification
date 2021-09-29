@@ -24,7 +24,7 @@ def main():
     best_acc = 0
     run_avg = RunningAverage()
 
-    if args.optimizer == 'adamw':
+    if args.opt == 'adamw':
         scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0.001, max_lr=0.1)
     else:
         torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0.001, max_lr=0.1, cyclic_momentum=False)

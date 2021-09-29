@@ -94,6 +94,7 @@ def get_transforms(args):
 
     return train_transforms
 
+
 def select_optimizer(args, model):
     if args.opt == 'sgd':
         return optim.SGD(model.parameters(), lr=args.lr, momentum=0.5, weight_decay =args.weight_decay)
