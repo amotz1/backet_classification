@@ -107,7 +107,7 @@ class UnetDownSampleLayer(nn.Module):
 class UnetUpSampleLayer(nn.Module):
     def __init__(self,in_chans, out_chans):
         super(UnetUpSampleLayer, self).__init__()
-        self.transpose_conv = nn.ConvTranspose2d(in_chans = in_chans, out_chans = out_chans, kernel_size=2, stride=2)
+        self.transpose_conv = nn.ConvTranspose2d(in_chans, out_chans, kernel_size=2, stride=2)
 
     def forward(self, x):
         x = self.transpose_conv(x)
@@ -117,8 +117,8 @@ class UnetUpSampleLayer(nn.Module):
 class UnetDoubleConvLayer:
     def __init__(self, in_chan, out_chan):
         super(UnetDoubleConvLayer, self).__init__()
-        self.conv1 = nn.Conv2d(in_chan, out_chan/2, kernel_size=3)
-        self.conv2 = nn.Conv2d(out_chan/2, out_chan/2, kernel_size=3)
+        self.conv1 = nn.Conv2d(in_chan, int(out_chan/2), kernel_size=3)
+        self.conv2 = nn.Conv2d(int(out_chan/2), int(out_chan/2), kernel_size=3)
 
     def forward(self, x):
         x = self.conv2(self.conv1(x))
@@ -146,6 +146,7 @@ class Unet(nn.Module):
         self.conv5 = nn.Conv2d(64, 2, kernel_size=1)
 
     def forward(self, image):
+
         x1 = self.UnetDownSampleLayer1(image)
         x2 = self.maxpool(x1)
         x2 = self.UnetDownSampleLayer2(x2)
@@ -154,18 +155,33 @@ class Unet(nn.Module):
         x4 = self.maxpool(x3)
         x4 = self.UnetDownSampleLayer4(x4)
         x5 = self.maxpool(x4)
-
-        output = torch.cat(crop_fm(x4, self.UnetUpSampleLayer1(x5)), self.UnetUpSampleLayer1(x5))
-        output = self.conv1(output)
-        output = torch.cat(crop_fm(x3, self.UnetUpSampleLayer2(output)), self.UnetUpSampleLayer2(output))
-        output = self.conv2(output)
-        output = torch.cat(crop_fm(x2, self.UnetUpSampleLayer2(output)), self.UnetUpSampleLayer3(output))
-        output = self.conv3(output)
-        output = torch.cat(crop_fm(x1, self.UnetUpSampleLayer2(output)), self.UnetUpSampleLayer4(output))
-        output = self.conv4(output)
+        x5 = self.UnetDownSampleLayer5(x5)
+        print(x5.shape)
+        x6 = self.UnetUpSampleLayer1(x5)
+        y = crop_fm(x4, x6)
+        x7 = torch.cat([y, x6],1)
+        x7 = self.conv1(x7)
+        x8 = self.UnetUpSampleLayer2(x7)
+        y1 = crop_fm(x3, x8)
+        print("x8.shape ",x8.shape)
+        x9 = torch.cat([y1,x8],1)
+        x9 = self.conv2(x9)
+        x10 = self.UnetUpSampleLayer3(x9)
+        print("x9.shape", x9.shape)
+        y2 = crop_fm(x2, x10)
+        x11 = torch.cat([y2, x10],1)
+        print("x11.shape ",x11.shape)
+        x11 = self.conv3(x11)
+        x12 = self.UnetUpSampleLayer4(x11)
+        y3 = crop_fm(x1, x12)
+        x13 = torch.cat([y3, x12],1)
+        output = self.conv4(x13)
         output = self.conv5(output)
+        print("output.sshape ", output.shape)
 
         return output
+
+
 
 
 

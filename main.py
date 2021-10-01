@@ -13,7 +13,12 @@ def main():
     args = get_args()
     wandb.init()
     wandb.config.update(args)
-    torch.backends.cudnn.benchmark = True
+
+    seed = 42
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
     loaded_model = False
 
