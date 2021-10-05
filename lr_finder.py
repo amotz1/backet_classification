@@ -1,5 +1,3 @@
-from model import Lenet5, FullyConnected, CNN
-from torch_lr_finder.lr_finder import LRFinder
 from utils import get_args
 import torch
 from torch import nn

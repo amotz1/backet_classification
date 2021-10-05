@@ -85,6 +85,7 @@ def load_checkpoint(check_point):
 
 
 def get_args():
+    print("hi")
     parser = argparse.ArgumentParser()
     parser.add_argument('--batch_size', type=int, default=128, help='batch size for training')
     parser.add_argument('--dataset_name', type=str, default='shape_class', help='dataset_name')
