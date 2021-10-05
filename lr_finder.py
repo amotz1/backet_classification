@@ -5,7 +5,6 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 from torch_lr_finder import LRFinder
 from initialize import select_model, select_optimizer, get_transforms
-import argparse
 
 
 def lf():
@@ -24,5 +23,6 @@ def lf():
     criterion = nn.CrossEntropyLoss(reduction='mean')
     lr_finder = LRFinder(model, optimizer, criterion, device="cuda")
     lr_finder.range_test(train_loader, end_lr=10, num_iter=100, step_mode="exp")
+    lr_finder.plot()
 
 lf()
