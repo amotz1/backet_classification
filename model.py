@@ -75,7 +75,7 @@ class Lenet5(nn.Module):
 class FullyConnected(nn.Module):
     def __init__(self, classes):
         super(FullyConnected, self).__init__()
-        self.linear1 = nn.Linear(3*64*10, 300)
+        self.linear1 = nn.Linear(3*6*64, 300)
         self.batch1 = nn.BatchNorm1d(300)
         self.relu1 = nn.ReLU()
         self.linear2 = nn.Linear(300, 100)
