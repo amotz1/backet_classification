@@ -29,8 +29,7 @@ def main():
     best_acc = 0
     run_avg = RunningAverage()
 
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min')
-
+    # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min')
     scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0.001, max_lr=0.1, cycle_momentum=False)
 
     for epoch in range(1, args.epochs_number + 1):
