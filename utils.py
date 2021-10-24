@@ -97,7 +97,7 @@ def get_args():
     parser.add_argument('--cuda', action='store_true', default=True, help='gpu for training acceleration')
     parser.add_argument('--model', type=str, default='FullyConnected')
     parser.add_argument('--opt', type=str, default='adamw', choices=('sgd','adam','rmsprop'))
-    parser.add_argument('--root_path', type=str, default='/content/backet_classification/MnistData', help='path to dataset')
+    parser.add_argument('--root_path', type=str, default='/content/backet_classification/data/MnistData', help='path to dataset')
     parser.add_argument('--save', type=str, default='/content/save/backetnet', help='path to checkpoint save directory')
 
     args = parser.parse_args()
