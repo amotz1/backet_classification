@@ -22,7 +22,7 @@ def lf():
 
     criterion = nn.CrossEntropyLoss(reduction='mean')
     lr_finder = LRFinder(model, optimizer, criterion, device="cuda")
-    lr_finder.range_test(train_loader, end_lr=10, num_iter=100, step_mode="exp")
+    lr_finder.range_test(train_loader, end_lr=10, num_iter=300, step_mode="exp")
     lr_finder.plot()
 
 lf()
