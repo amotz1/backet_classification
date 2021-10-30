@@ -30,7 +30,7 @@ def main():
     run_avg = RunningAverage()
 
     # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min')
-    scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0.001, max_lr=0.1, cycle_momentum=False)
+    # scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0.001, max_lr=0.1, cycle_momentum=False)
 
     for epoch in range(1, args.epochs_number + 1):
         run_avg.reset_train()
@@ -39,7 +39,7 @@ def main():
         train(args, model, train_loader, epoch, optimizer, scaler, run_avg)
         val_acc = evaluation(args, model, valid_loader, epoch, run_avg)
 
-        scheduler.step()
+        # scheduler.step()
         if best_acc < val_acc:
             best_acc = val_acc
             save_checkpoint(model, optimizer, args, epoch)
