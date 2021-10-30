@@ -100,7 +100,7 @@ def select_optimizer(args, model):
         return optim.SGD(model.parameters(), lr=args.lr, momentum=0.5, weight_decay =args.weight_decay)
 
     elif args.opt == 'adam':
-        return optim.Adam(model.parameters(), lr=args.lr)
+        return optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
     elif args.opt == 'rmsprop':
         return optim.RMSprop(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
