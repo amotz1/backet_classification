@@ -24,6 +24,17 @@ class CNN(nn.Module):
         return self.cnn(x)
 
 
+class CNN1(nn.Module):
+    def __init__(self, classes):
+        super(CNN1, self).__init__()
+
+        self.cnn = models.resnet34(pretrained=False)
+        self.cnn.fc = nn.Linear(512, classes)
+
+    def forward(self, x):
+        return self.cnn(x)
+
+
 class Lenet5(nn.Module):
     def __init__(self, classes):
         super(Lenet5, self).__init__()

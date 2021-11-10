@@ -60,6 +60,9 @@ def select_model(args):
     if args.model == "resnet18":
         return CNN(args.classes)
 
+    elif args.model == "resnet34":
+        return CNN(args.classes)
+
     elif args.model == "Lenet5":
         return Lenet5(args.classes)
 
@@ -72,6 +75,13 @@ def select_model(args):
 
 def get_transforms(args):
     if args.model == "resnet18":
+        train_transforms = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Resize((224, 224)),
+            transforms.Normalize([0.2858, 0.2858, 0.2858], [0.2869, 0.2869, 0.2869])
+        ])
+
+    elif args.model == "resnet34":
         train_transforms = transforms.Compose([
             transforms.ToTensor(),
             transforms.Resize((224, 224)),
