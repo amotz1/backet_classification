@@ -2,7 +2,7 @@ from backet_dataset import BacketDataset
 from torch.utils.data import DataLoader
 import torch
 from torch import nn
-from model import CNN, Lenet5, FullyConnected
+from model import CNN, CNN1, Lenet5, FullyConnected
 import torch.optim as optim
 from torchvision import datasets, transforms
 from utils import load_checkpoint
@@ -61,7 +61,7 @@ def select_model(args):
         return CNN(args.classes)
 
     elif args.model == "resnet34":
-        return CNN(args.classes)
+        return CNN1(args.classes)
 
     elif args.model == "Lenet5":
         return Lenet5(args.classes)
